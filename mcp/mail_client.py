@@ -1,7 +1,14 @@
 import json
 
+import os
+import sys
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "data", "sample_base.json"))
+
+print(DATA_PATH)
+
 EMAILS = None
-DATA_PATH = "../data/sample_base.json"
 
 
 def load_emails() -> None:
@@ -9,7 +16,7 @@ def load_emails() -> None:
     with open(DATA_PATH, "r") as f:
         data = json.loads(f.read())
         global EMAILS
-        EMAILS = data
+        EMAILS = data["emails"]
 
 
 def get_emails() -> list[dict]:
@@ -21,6 +28,9 @@ def get_emails() -> list[dict]:
 
 def search_email(id: str) -> dict:
     """Search the available emails and return a single email"""
+    if EMAILS is None:
+        load_emails()
+
     email = [x for x in EMAILS if x["id"] == id]
     return email
 
