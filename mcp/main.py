@@ -11,18 +11,6 @@ mcp = FastMCP("Meli MCP")
 
 
 @mcp.tool
-def greet(name: str) -> str:
-    return f"Hello, {name}!"
-
-
-@mcp.tool
-def add(a: int, b: int) -> int:
-    """Add two numbers"""
-    print("Executing call to add tool from MCP")
-    return a + b
-
-
-@mcp.tool
 def list_emails() -> list[dict]:
     """Returns the list of all available emails"""
     return get_emails()
