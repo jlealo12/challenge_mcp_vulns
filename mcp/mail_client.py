@@ -32,8 +32,10 @@ def search_email(id: str) -> dict:
         load_emails()
 
     email = [x for x in EMAILS if x["id"] == id]
-    return email
-
+    if email:
+        return email
+    else:
+        return "email id not found"
 
 if __name__ == "__main__":
     print("=" * 20)
