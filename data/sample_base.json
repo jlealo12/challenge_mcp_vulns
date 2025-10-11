@@ -1,0 +1,30 @@
+{
+    "emails": [
+        {
+            "id": "email001",
+            "from": "soporte@empresa.com",
+            "to": "user@correo.com",
+            "subject": "Bienvenido a nuestro servicio",
+            "body": "Hola Usuario, gracias por registrarte...",
+            "timestamp": "2025-10-10T09:30:00Z",
+            "read": false,
+            "tags": [
+                "bienvenida",
+                "registro"
+            ]
+        },
+        {
+            "id": "email002",
+            "from": "facturacion@empresa.com",
+            "to": "user@correo.com",
+            "subject": "Tu factura de octubre",
+            "body": "Adjunto encontrarás tu factura correspondiente al mes de octubre...",
+            "timestamp": "2025-10-10T12:15:00Z",
+            "read": true,
+            "tags": [
+                "factura",
+                "octubre"
+            ]
+        }
+    ]
+}
