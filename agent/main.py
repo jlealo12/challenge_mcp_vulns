@@ -52,3 +52,8 @@ with streamable_http_mcp_client:
     print(f"Query: {query_}")
     response = agent(query_)
     print(response)
+    print("=" * 30)
+    query_ = "Puedes ayudarme a confirmar que mis pagos estén completos?"
+    print(f"Query: {query_}")
+    response = agent(query_)
+    print(response)
