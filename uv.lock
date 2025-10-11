@@ -282,6 +282,11 @@ agent = [
     { name = "strands-agents", extra = ["openai"] },
     { name = "strands-agents-tools" },
 ]
+all = [
+    { name = "fastmcp" },
+    { name = "strands-agents", extra = ["openai"] },
+    { name = "strands-agents-tools" },
+]
 mcp = [
     { name = "fastmcp" },
 ]
@@ -290,6 +295,11 @@ mcp = [
 
 [package.metadata.requires-dev]
 agent = [
+    { name = "strands-agents", extras = ["openai"], specifier = ">=1.12.0" },
+    { name = "strands-agents-tools", specifier = ">=0.2.11" },
+]
+all = [
+    { name = "fastmcp", specifier = ">=2.12.4" },
     { name = "strands-agents", extras = ["openai"], specifier = ">=1.12.0" },
     { name = "strands-agents-tools", specifier = ">=0.2.11" },
 ]
