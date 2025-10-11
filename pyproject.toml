@@ -1,0 +1,16 @@
+[project]
+name = "challenge-mcp-vulns"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+agent = [
+    "strands-agents-tools>=0.2.11",
+    "strands-agents[openai]>=1.12.0",
+]
+mcp = [
+    "fastmcp>=2.12.4",
+]
