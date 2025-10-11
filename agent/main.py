@@ -5,6 +5,11 @@ import os
 
 from dotenv import load_dotenv
 
+from mcp.client.streamable_http import streamablehttp_client
+from strands.tools.mcp.mcp_client import MCPClient
+
+streamable_http_mcp_client = MCPClient(lambda: streamablehttp_client("http://localhost:8000/mcp"))
+
 # Load environment variables
 load_dotenv()
 
@@ -22,6 +27,10 @@ model = OpenAIModel(
     }
 )
 
-agent = Agent(model=model, tools=[calculator])
-response = agent("What is 2+2")
-print(response)
+with streamable_http_mcp_client:
+    # Get the tools from the MCP server
+    tools = streamable_http_mcp_client.list_tools_sync()
+
+    agent = Agent(model=model, tools=tools)
+    response = agent("What is 2+2")
+    print(response)
