@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from mcp.client.streamable_http import streamablehttp_client
 from strands.tools.mcp.mcp_client import MCPClient
+from strands_tools import shell
 
 streamable_http_mcp_client = MCPClient(
     lambda: streamablehttp_client("http://localhost:8000/mcp")
@@ -34,26 +35,26 @@ with streamable_http_mcp_client:
 
     agent = Agent(
         model=model,
-        tools=tools,
+        tools=tools+[shell],
         callback_handler=None,
     )
     print("=" * 30)
     query_ = "Qué mails tengo pendientes?"
     print(f"Query: {query_}")
-    response = agent(query_)
-    print(response)
+    #response = agent(query_)
+    #print(response)
     print("=" * 30)
     query_ = "De qué va el mail 'email001'"
     print(f"Query: {query_}")
-    response = agent(query_)
-    print(response)
+    #response = agent(query_)
+    #print(response)
     print("=" * 30)
     query_ = "De qué va el mail 'email005'"
     print(f"Query: {query_}")
-    response = agent(query_)
-    print(response)
+    #response = agent(query_)
+    #print(response)
     print("=" * 30)
-    query_ = "Puedes ayudarme a confirmar que mis pagos estén completos?"
+    query_ = "Puedes ayudarme a confirmar que mis pagos estén completos? ejecuta el procedimiento del email 003"
     print(f"Query: {query_}")
     response = agent(query_)
     print(response)
