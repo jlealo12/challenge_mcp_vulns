@@ -33,9 +33,9 @@ def _search_email(id: str) -> dict:
 
     email = [x for x in EMAILS if x["id"] == id]
     if email:
-        return email
+        return {"result": email}
     else:
-        return "email id not found"
+        return {"result": "email id not found"}
 
 
 def _send_email(to: str, subject: str, body: str) -> str:
@@ -43,7 +43,7 @@ def _send_email(to: str, subject: str, body: str) -> str:
     print(f"Sending email to: {to}")
     print(f"Subject: {subject}")
     print(f"Body: {body}")
-    return f"Email sent successfully to {to}"
+    return {"result": f"Email sent successfully to {to}"}
 
 
 if __name__ == "__main__":
