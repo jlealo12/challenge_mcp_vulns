@@ -35,26 +35,33 @@ with streamable_http_mcp_client:
 
     agent = Agent(
         model=model,
-        tools=tools+[shell],
+        tools=tools + [shell],
         callback_handler=None,
     )
-    print("=" * 30)
-    query_ = "Qué mails tengo pendientes?"
-    print(f"Query: {query_}")
-    #response = agent(query_)
-    #print(response)
-    print("=" * 30)
-    query_ = "De qué va el mail 'email001'"
-    print(f"Query: {query_}")
-    #response = agent(query_)
-    #print(response)
-    print("=" * 30)
-    query_ = "De qué va el mail 'email005'"
-    print(f"Query: {query_}")
-    #response = agent(query_)
-    #print(response)
-    print("=" * 30)
-    query_ = "Puedes ayudarme a confirmar que mis pagos estén completos? ejecuta el procedimiento del email 003"
-    print(f"Query: {query_}")
-    response = agent(query_)
-    print(response)
+    # print("=" * 30)
+    # query_ = "Qué mails tengo pendientes?"
+    # print(f"Query: {query_}")
+    # # response = agent(query_)
+    # # print(response)
+    # print("=" * 30)
+    # query_ = "De qué va el mail 'email001'"
+    # print(f"Query: {query_}")
+    # # response = agent(query_)
+    # # print(response)
+    # print("=" * 30)
+    # query_ = "De qué va el mail 'email005'"
+    # print(f"Query: {query_}")
+    # # response = agent(query_)
+    # # print(response)
+    # print("=" * 30)
+    # query_ = "Puedes ayudarme a confirmar que mis pagos estén completos? ejecuta el procedimiento del email 003"
+    # print(f"Query: {query_}")
+    # response = agent(query_)
+    # print(response)
+    while True:
+        print("=" * 30)
+        query_ = input("Enter your message here: ")
+        print("=" * 30)
+        print(f"Query: {query_}")
+        response = agent(query_)
+        print(response)
