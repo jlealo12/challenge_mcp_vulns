@@ -13,3 +13,17 @@ commit-tag:
 push:
 	git push &&	git push --tags
 
+agent:
+	clear
+	@echo "Executing agent..."
+	uv run agent/main.py
+
+mcp:
+	clear
+	@echo "Running MCP server..."
+	uv run mcp/main.py
+
+test-mcp:
+	clear
+	@echo "Testing MCP server..."
+	uv run mcp/client.py
