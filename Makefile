@@ -13,7 +13,7 @@ commit-tag:
 push:
 	git push &&	git push --tags
 
-agent:
+run-agent:
 	clear
 	@echo "Executing agent..."
 	uv run agent/main.py
