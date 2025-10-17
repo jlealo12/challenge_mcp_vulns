@@ -98,14 +98,13 @@ Debes ayudar al usuario a leer, priorizar y responder a sus correos electrónico
 Antes de ejecutar las siguientes acciones, utiliza la herramienta 'handoff_to_user' para pedir autorización de ejecución al usuario:
 - send_email"""
 
-models = ["gpt-5-2025-08-07", "gpt-5-mini-2025-08-07", "gpt-4o", "gpt-4.1-2025-04-14"]
 
 model = OpenAIModel(
     client_args={
         "api_key": os.getenv("OPENAI_API_KEY"),
     },
     # **model_config
-    model_id=models[2],
+    model_id="gpt-4o",
     params={
         "max_completion_tokens": 1000,
         "temperature": 0.7,
