@@ -38,8 +38,14 @@ class JsonFormatter(logging.Formatter):
 file_handler = logging.FileHandler(LOGS_PATH)
 file_handler.setFormatter(JsonFormatter())
 
-# Add the handler to the strands logger
-logging.getLogger("strands").addHandler(file_handler)
+# Enable DEBUG logs for the tool registry and model
+logging.getLogger("strands.tools.registry").setLevel(logging.DEBUG)
+logging.getLogger("strands.models").setLevel(logging.DEBUG)
+
+# Add a handler to see the logs
+logging.basicConfig(
+    format="%(levelname)s | %(name)s | %(message)s", handlers=[file_handler]
+)
 
 streamable_http_mcp_client = MCPClient(
     lambda: streamablehttp_client("http://localhost:8000/mcp")
