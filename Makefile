@@ -13,10 +13,15 @@ commit-tag:
 push:
 	git push &&	git push --tags
 
-run-agent:
+run-v-agent:
 	clear
-	@echo "Executing agent..."
-	uv run agent/main.py
+	@echo "Executing vulnerable agent..."
+	uv run agent/vulnerable.py
+
+run-p-agent:
+	clear
+	@echo "Executing vulnerable agent..."
+	uv run agent/protected.py
 
 mcp:
 	clear
