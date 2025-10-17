@@ -23,7 +23,7 @@ run-p-agent:
 	@echo "Executing vulnerable agent..."
 	uv run agent/protected.py
 
-mcp:
+mcp-v:
 	clear
 	@echo "Running MCP server..."
 	uv run mcp/main.py
