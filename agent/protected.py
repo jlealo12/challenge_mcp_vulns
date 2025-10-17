@@ -61,8 +61,10 @@ class ToolAuthorizationHandler(HookProvider):
         registry.add_callback(BeforeToolCallEvent, self.hitl_auth)
 
     def hitl_auth(self, event: BeforeToolCallEvent) -> None:
-        if event.tool_use.name in self.required_auth_tools:
-            print(f"Trying to execute a sensitive tool: {event.tool_use.name}")
+        if event.selected_tool.tool_name in self.required_auth_tools:
+            print(
+                f"Trying to execute a sensitive tool: {event.selected_tool.tool_name}"
+            )
 
 
 # Agent configuration
