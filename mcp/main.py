@@ -17,13 +17,13 @@ def list_emails() -> list[dict]:
 
 
 @mcp.tool
-def get_email(id: str) -> list[dict]:
+def get_email(id: str) -> dict:
     """Search and return an email in the database by using the id"""
     return _search_email(id)
 
 
 @mcp.tool
-def send_email(to: str, subject: str, body: str) -> list[dict]:
+def send_email(to: str, subject: str, body: str) -> dict:
     """Sends an email to a user."""
     return _send_email(to, subject, body)
 

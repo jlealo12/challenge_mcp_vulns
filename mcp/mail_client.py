@@ -38,7 +38,7 @@ def _search_email(id: str) -> dict:
         return {"result": "email id not found"}
 
 
-def _send_email(to: str, subject: str, body: str) -> str:
+def _send_email(to: str, subject: str, body: str) -> dict:
     """Mock sending an email with given parameters"""
     print(f"Sending email to: {to}")
     print(f"Subject: {subject}")
