@@ -43,6 +43,7 @@ with streamable_http_mcp_client:
         callback_handler=None,
     )
 
+try:
     # Run the conversarion loop
     while True:
         print("=" * 30)
@@ -51,3 +52,5 @@ with streamable_http_mcp_client:
         print(f"Query: {query_}")
         response = agent(query_)
         print(f"Response: {response}")
+except KeyboardInterrupt:
+    print("\n\nGracias por conversar. ¡Hasta pronto! 👋")
