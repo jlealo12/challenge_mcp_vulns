@@ -62,7 +62,7 @@ class ToolAuthorizationHandler(HookProvider):
 
     def hitl_auth(self, event: BeforeToolCallEvent) -> None:
         if event.tool_use.name in self.required_auth_tools:
-            print("Trying to execute a sensitive tool")
+            print(f"Trying to execute a sensitive tool: {event.tool_use.name}")
 
 
 # Agent configuration
