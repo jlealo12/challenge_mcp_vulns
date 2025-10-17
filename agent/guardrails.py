@@ -17,4 +17,4 @@ def apply_guardrails(input_: str) -> dict:
         model="omni-moderation-latest",
         input=input_,
     )
-    return response
+    return response["results"][0]["flagged"]

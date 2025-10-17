@@ -64,26 +64,32 @@ logging.basicConfig(
 load_dotenv()
 
 
+class GuardrailsIntervention(Exception):
+    """Used to represent a payload intervention by the guardrails"""
+
+    pass
+
+
 # Utils hooks
 class GuardrailsHook(HookProvider):
     def register_hooks(self, registry: HookRegistry) -> None:
         registry.add_callback(BeforeModelCallEvent, self.apply_guards_input)
         registry.add_callback(AfterModelCallEvent, self.apply_guards_output)
-        registry.add_callback(BeforeToolCallEvent, self.apply_guards_tool_input)
 
     def apply_guards_input(self, event: BeforeModelCallEvent) -> None:
         print("Executing input guardrails")
         input_txt = event.agent.messages[-1]["content"][0]["text"]
         guard_rslt = apply_guardrails(input_txt)
-        print(guard_rslt)
-        
+        if guard_rslt:
+            raise GuardrailsIntervention("Input texts blocked by guardrails")
+
     def apply_guards_output(self, event: AfterModelCallEvent) -> None:
         print("Executing output guardrails")
         print(event.stop_response.message["content"][0]["text"])
-
-    def apply_guards_tool_input(self, event: BeforeToolCallEvent) -> None:
-        print("Executing tool input guardrails")
-        print(event)
+        output_txt = event.stop_response.message["content"][0]["text"]
+        guard_rslt = apply_guardrails(output_txt)
+        if guard_rslt:
+            raise GuardrailsIntervention("output texts blocked by guardrails")
 
 
 # Agent configuration
