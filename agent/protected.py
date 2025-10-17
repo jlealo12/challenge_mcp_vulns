@@ -1,7 +1,7 @@
 """Versión protegida del agente de correos. Esta versión aplica los siguientes principios:
 - Mínimo privilegio: se elimina el uso de la herramienta de shell, que está fuera del scope de la app
 - Traceability: se habilitan logs de monitoreo del agente a un repositorio externo para validación y control
-- Gating/HITL: se habilita vaidación humana antes de la ejecución de herramientas con acciones de modificación (C/UD)
+- Gating/HITL: se habilita validación humana antes de la ejecución de herramientas con acciones de modificación (C/UD)
 """
 
 import os
