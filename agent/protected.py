@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from mcp.client.streamable_http import streamablehttp_client
 from strands.tools.mcp.mcp_client import MCPClient
 from strands_tools import handoff_to_user
+from strands.hooks import HookProvider, HookRegistry, BeforeToolCallEvent
 
 import logging
 import json
@@ -47,17 +48,26 @@ logging.basicConfig(
     format="%(levelname)s | %(name)s | %(message)s", handlers=[file_handler]
 )
 
-streamable_http_mcp_client = MCPClient(
-    lambda: streamablehttp_client("http://localhost:8000/mcp")
-)
-
 # Load environment variables
 load_dotenv()
 
+
+# Utils hooks
+class ToolAuthorizationHandler(HookProvider):
+    def __init__(self):
+        self.required_auth_tools = ["send_email", "shell"]
+
+    def register_hooks(self, registry: HookRegistry) -> None:
+        registry.add_callback(BeforeToolCallEvent, self.hitl_auth)
+
+    def hitl_auth(self, event: BeforeToolCallEvent) -> None:
+        if event.tool_use.name in self.required_auth_tools:
+            print("Trying to execute a sensitive tool")
+
+
+# Agent configuration
 SYSTEM_PROMPT = """Tu nombre es Melisa, eres una asistente virtual que ayuda a gestionar la bandeja de correo electrónico.
-Debes ayudar al usuario a leer, priorizar y responder a sus correos electrónicos.
-Antes de ejecutar las siguientes acciones, utiliza la herramienta 'handoff_to_user' para pedir autorización de ejecución al usuario:
-- send_email"""
+Debes ayudar al usuario a leer, priorizar y responder a sus correos electrónicos."""
 
 models = ["gpt-5-2025-08-07", "gpt-5-mini-2025-08-07", "gpt-4o", "gpt-4.1-2025-04-14"]
 
@@ -73,6 +83,10 @@ model = OpenAIModel(
     },
 )
 
+# MCP client initialization
+streamable_http_mcp_client = MCPClient(
+    lambda: streamablehttp_client("http://localhost:8000/mcp")
+)
 with streamable_http_mcp_client:
     # Get the tools from the MCP server
     tools = streamable_http_mcp_client.list_tools_sync()
@@ -80,8 +94,9 @@ with streamable_http_mcp_client:
     agent = Agent(
         system_prompt=SYSTEM_PROMPT,
         model=model,
-        tools=tools + [handoff_to_user],
+        tools=tools,
         callback_handler=None,
+        hooks=[ToolAuthorizationHandler()],
     )
 
     try:
