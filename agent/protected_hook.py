@@ -4,28 +4,16 @@
 - Gating/HITL: se habilita vaidación humana antes de la ejecución de herramientas con acciones de modificación (C/UD)
 """
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from guardrails import apply_guardrails
-
 from strands import Agent
 from strands.models.openai import OpenAIModel
+import os
 
 from dotenv import load_dotenv
 
 from mcp.client.streamable_http import streamablehttp_client
 from strands.tools.mcp.mcp_client import MCPClient
 from strands_tools import handoff_to_user
-from strands.hooks import (
-    HookProvider,
-    HookRegistry,
-    BeforeToolCallEvent,
-    BeforeModelCallEvent,
-    AfterModelCallEvent,
-)
+from strands.hooks import HookProvider, HookRegistry, BeforeToolCallEvent
 
 import logging
 import json
@@ -65,30 +53,32 @@ load_dotenv()
 
 
 # Utils hooks
-class GuardrailsHook(HookProvider):
+class ToolAuthorizationHandler(HookProvider):
+    def __init__(self):
+        self.required_auth_tools = ["send_email", "shell"]
+
     def register_hooks(self, registry: HookRegistry) -> None:
-        registry.add_callback(BeforeModelCallEvent, self.apply_guards_input)
-        registry.add_callback(AfterModelCallEvent, self.apply_guards_output)
-        registry.add_callback(BeforeToolCallEvent, self.apply_guards_tool_input)
+        registry.add_callback(BeforeToolCallEvent, self.hitl_auth)
 
-    def apply_guards_input(self, event: BeforeModelCallEvent) -> None:
-        print("Executing input guardrails")
-        print(event)
-
-    def apply_guards_output(self, event: AfterModelCallEvent) -> None:
-        print("Executing output guardrails")
-        print(event)
-
-    def apply_guards_tool_input(self, event: BeforeToolCallEvent) -> None:
-        print("Executing tool input guardrails")
-        print(event)
+    def hitl_auth(self, event: BeforeToolCallEvent) -> None:
+        if event.selected_tool.tool_name in self.required_auth_tools:
+            print(
+                f"--- Necesito ejecutar la siguiente herramienta: {event.selected_tool.tool_name} ---"
+            )
+            print("--- ¿Autorizas la ejecución con los siguientes parámetros? ---")
+            print("--- Parámetros: ---")
+            print(event.selected_tool.invocation_state)
+            tool_auth = input("¿Autoriza ejecución? y/n: ").lower().strip()[0]
+            if tool_auth == "y":
+                print("--- Ejecutando acción... ---")
+            else:
+                print("--- Cancelando acción... ---")
+                event.selected_tool.cancel_tool = True
 
 
 # Agent configuration
 SYSTEM_PROMPT = """Tu nombre es Melisa, eres una asistente virtual que ayuda a gestionar la bandeja de correo electrónico.
-Debes ayudar al usuario a leer, priorizar y responder a sus correos electrónicos.
-Antes de ejecutar las siguientes acciones, utiliza la herramienta 'handoff_to_user' para pedir autorización de ejecución al usuario:
-- send_email"""
+Debes ayudar al usuario a leer, priorizar y responder a sus correos electrónicos."""
 
 models = ["gpt-5-2025-08-07", "gpt-5-mini-2025-08-07", "gpt-4o", "gpt-4.1-2025-04-14"]
 
@@ -115,9 +105,9 @@ with streamable_http_mcp_client:
     agent = Agent(
         system_prompt=SYSTEM_PROMPT,
         model=model,
-        tools=tools + [handoff_to_user],
+        tools=tools,
         callback_handler=None,
-        hooks=[GuardrailsHook()],
+        hooks=[ToolAuthorizationHandler()],
     )
 
     try:
