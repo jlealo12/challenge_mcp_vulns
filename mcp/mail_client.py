@@ -1,12 +1,9 @@
 import json
 
 import os
-import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "data", "sample_base.json"))
-
-print(DATA_PATH)
 
 EMAILS = None
 
