@@ -73,11 +73,13 @@ class GuardrailsHook(HookProvider):
 
     def apply_guards_input(self, event: BeforeModelCallEvent) -> None:
         print("Executing input guardrails")
-        print(event)
-
+        input_txt = event.agent.messages[-1]["content"][0]["text"]
+        guard_rslt = apply_guardrails(input_txt)
+        print(guard_rslt)
+        
     def apply_guards_output(self, event: AfterModelCallEvent) -> None:
         print("Executing output guardrails")
-        print(event)
+        print(event.stop_response.message["content"][0]["text"])
 
     def apply_guards_tool_input(self, event: BeforeToolCallEvent) -> None:
         print("Executing tool input guardrails")
