@@ -8,11 +8,7 @@ import os
 load_dotenv()
 
 # Initialize client
-client = OpenAI(
-    client_args={
-        "api_key": os.getenv("OPENAI_API_KEY"),
-    }
-)
+client = OpenAI()
 
 
 def apply_guardrails(input_: str) -> dict:
