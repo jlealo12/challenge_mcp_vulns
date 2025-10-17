@@ -11,7 +11,7 @@ print(DATA_PATH)
 EMAILS = None
 
 
-def load_emails() -> None:
+def _load_emails() -> None:
     """Loads the list of emails from the path"""
     with open(DATA_PATH, "r") as f:
         data = json.loads(f.read())
@@ -19,17 +19,17 @@ def load_emails() -> None:
         EMAILS = data["emails"]
 
 
-def get_emails() -> list[dict]:
+def _get_emails() -> list[dict]:
     """Reads and return the full list of emails available"""
     if EMAILS is None:
-        load_emails()
+        _load_emails()
     return EMAILS
 
 
-def search_email(id: str) -> dict:
+def _search_email(id: str) -> dict:
     """Search the available emails and return a single email"""
     if EMAILS is None:
-        load_emails()
+        _load_emails()
 
     email = [x for x in EMAILS if x["id"] == id]
     if email:
@@ -37,11 +37,20 @@ def search_email(id: str) -> dict:
     else:
         return "email id not found"
 
+
+def _send_email(to: str, subject: str, body: str) -> str:
+    """Mock sending an email with given parameters"""
+    print(f"Sending email to: {to}")
+    print(f"Subject: {subject}")
+    print(f"Body: {body}")
+    return f"Email sent successfully to {to}"
+
+
 if __name__ == "__main__":
     print("=" * 20)
     print(
         json.dumps(
-            get_emails(),
+            _get_emails(),
             indent=2,
             ensure_ascii=False,
         )
@@ -49,7 +58,7 @@ if __name__ == "__main__":
     print("=" * 20)
     print(
         json.dumps(
-            search_email("email002"),
+            _search_email("email002"),
             indent=2,
             ensure_ascii=False,
         )
@@ -57,8 +66,16 @@ if __name__ == "__main__":
     print("=" * 20)
     print(
         json.dumps(
-            search_email("email005"),
+            _search_email("email005"),
             indent=2,
             ensure_ascii=False,
+        )
+    )
+    print("=" * 20)
+    print(
+        _send_email(
+            to="recipient@example.com",
+            subject="Meeting Reminder",
+            body="Don't forget our meeting at 10 AM tomorrow.",
         )
     )
