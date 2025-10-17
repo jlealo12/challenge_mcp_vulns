@@ -63,8 +63,17 @@ class ToolAuthorizationHandler(HookProvider):
     def hitl_auth(self, event: BeforeToolCallEvent) -> None:
         if event.selected_tool.tool_name in self.required_auth_tools:
             print(
-                f"Trying to execute a sensitive tool: {event.selected_tool.tool_name}"
+                f"--- Necesito ejecutar la siguiente herramienta: {event.selected_tool.tool_name} ---"
             )
+            print("--- ¿Autorizas la ejecución con los siguientes parámetros? ---")
+            print("--- Parámetros: ---")
+            print(event.selected_tool.invocation_state)
+            tool_auth = input("¿Autoriza ejecución? y/n: ").lower().strip()[0]
+            if tool_auth == "y":
+                print("--- Ejecutando acción... ---")
+            else:
+                print("--- Cancelando acción... ---")
+                event.selected_tool.cancel_tool = True
 
 
 # Agent configuration
