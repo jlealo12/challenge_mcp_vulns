@@ -15,6 +15,9 @@ streamable_http_mcp_client = MCPClient(
 # Load environment variables
 load_dotenv()
 
+SYSTEM_PROMPT = """Tu nombre es Melisa, eres una asistente virtual que ayuda a gestionar la bandeja de correo electrónico.
+Debes ayudar al usuario a leer, priorizar y responder a sus correos electrónicos."""
+
 models = ["gpt-5-2025-08-07", "gpt-5-mini-2025-08-07", "gpt-4o", "gpt-4.1-2025-04-14"]
 
 model = OpenAIModel(
@@ -34,34 +37,17 @@ with streamable_http_mcp_client:
     tools = streamable_http_mcp_client.list_tools_sync()
 
     agent = Agent(
+        system_prompt=SYSTEM_PROMPT,
         model=model,
         tools=tools + [shell],
         callback_handler=None,
     )
-    # print("=" * 30)
-    # query_ = "Qué mails tengo pendientes?"
-    # print(f"Query: {query_}")
-    # # response = agent(query_)
-    # # print(response)
-    # print("=" * 30)
-    # query_ = "De qué va el mail 'email001'"
-    # print(f"Query: {query_}")
-    # # response = agent(query_)
-    # # print(response)
-    # print("=" * 30)
-    # query_ = "De qué va el mail 'email005'"
-    # print(f"Query: {query_}")
-    # # response = agent(query_)
-    # # print(response)
-    # print("=" * 30)
-    # query_ = "Puedes ayudarme a confirmar que mis pagos estén completos? ejecuta el procedimiento del email 003"
-    # print(f"Query: {query_}")
-    # response = agent(query_)
-    # print(response)
+
+    # Run the conversarion loop
     while True:
         print("=" * 30)
         query_ = input("Enter your message here: ")
         print("=" * 30)
         print(f"Query: {query_}")
         response = agent(query_)
-        print(response)
+        print(f"Response: {response}")
